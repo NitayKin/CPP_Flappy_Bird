@@ -1,40 +1,55 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include "MoveableSprite.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Demo");
-    window.setFramerateLimit(40);
+	sf::RenderWindow window(sf::VideoMode(1024, 720), "SFML Demo");
+	window.setFramerateLimit(40);
 
-    sf::CircleShape circle(30);
-    circle.setFillColor(sf::Color::Red);
-    circle.setPosition(400, 300);
+	sf::Texture background_texture;
+	if (!background_texture.loadFromFile("assets/background.png"))
+	{
+		std::cout << "Failed to load background.png" << std::endl;
+		return 1;
+	}
 
-    float moveSpeed = 5.0f;
+	sf::Texture birdy_texture;
+	if (!birdy_texture.loadFromFile("assets/birdy.png"))
+	{
+		std::cout << "Failed to load background.png" << std::endl;
+		return 1;
+	}
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
+	sf::Sprite background_sprite(background_texture);
+	MoveableSprite birdy_sprite(birdy_texture);
+	birdy_sprite.scale(sf::Vector2f(0.5,0.5));
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            circle.move(-moveSpeed, 0);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            circle.move(moveSpeed, 0);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            circle.move(0, -moveSpeed);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            circle.move(0, moveSpeed);
-        }
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+		}
 
-        window.clear();
-        window.draw(circle);
-        window.display();
-    }
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+			birdy_sprite.tick_update();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+			birdy_sprite.tick_update();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			birdy_sprite.tick_update();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			birdy_sprite.tick_update();
+		}
 
-    return 0;
+//        window.clear();
+		window.draw(background_sprite);
+		window.draw(birdy_sprite);
+		window.display();
+	}
+
+	return 0;
 }
