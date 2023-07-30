@@ -1,14 +1,14 @@
+#ifndef INCLUDE_MOVEABLESPRITE_HPP_
+#define INCLUDE_MOVEABLESPRITE_HPP_
+
 #include <SFML/Graphics.hpp>
 
-class MoveableSprite : public sf::Sprite
-{
-private:
-	sf::Vector2f acceleration;
-	sf::Vector2f velocity;
-	sf::Vector2f net_force;
-	float mass = 0.2;
-
+class MoveableSprite : public sf::Sprite {
 public:
-	MoveableSprite(sf::Texture);
-	void tick_update();
+	MoveableSprite(sf::Texture& texture):sf::Sprite(texture){};
+    virtual void tick_update() = 0;
+    virtual ~MoveableSprite() = default;
 };
+
+
+#endif
