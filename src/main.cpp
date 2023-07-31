@@ -1,13 +1,21 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
+#include <cmath>
 
 #include "Globals.hpp"
 #include "World.hpp"
 #include "MoveableSpriteBird.hpp"
 #include "MoveableSpriteBar.hpp"
 
+void draw_world(sf::RenderWindow *window, sf::Sprite *background_sprite, World *world) {
+	(*window).draw(*background_sprite);
+	for(auto drawable : world->get_objects())
+		window->draw(*drawable);
+}
+
 int main() {
-	sf::RenderWindow window(sf::VideoMode(BACKGROUND_WIDTH, BACKGROUND_HEIGHT), "SFML Demo");
+	sf::RenderWindow window(sf::VideoMode(BACKGROUND_WIDTH, BACKGROUND_HEIGHT), "SFML Demo", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(40);
 
     sf::Font font;
@@ -17,7 +25,7 @@ int main() {
     }
 
     sf::Text score_text;
-    score_text.setCharacterSize(24);
+    score_text.setCharacterSize(50);
     score_text.setFillColor(sf::Color::Black);
     score_text.setPosition(10.f, 10.f);
     score_text.setFont(font);
@@ -25,8 +33,7 @@ int main() {
 
 
 	sf::Texture background_texture;
-	if (!background_texture.loadFromFile("assets/background.png"))
-	{
+	if (!background_texture.loadFromFile("assets/background.png")) {
 		std::cout << "Failed to load background.png" << std::endl;
 	}
 
@@ -34,7 +41,8 @@ int main() {
 	World world;
 
 	while (window.isOpen()) {
-		score_text.setString("Score: " + std::to_string(score));
+		score_text.setString(std::to_string(score));
+
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
@@ -42,18 +50,35 @@ int main() {
 			}
 		}
 
-		window.draw(background_sprite);
 		world.tick_update();
-		for(auto drawable : world.get_objects())
-			window.draw(*drawable);
+
+		draw_world(&window, &background_sprite, &world);
+
 		window.draw(score_text);
 		window.display();
+
 		if(world.check_lose()){
-		    score_text.setCharacterSize(50);
-		    score_text.setPosition(BACKGROUND_WIDTH/2.5, BACKGROUND_HEIGHT/2);
-			window.draw(score_text);
-			window.display();
+			float score_float_angle = 0.0;
+			sf::Vector2f score_text_center = score_text.getGlobalBounds().getSize() / 2.0f;
+			sf::Vector2f score_text_local_bounds = score_text_center + score_text.getLocalBounds().getPosition();
+
+		    score_text.setCharacterSize(100);
+			score_text.setOrigin(score_text_local_bounds);
+			score_text.setPosition(BACKGROUND_WIDTH / 2.0 - score_text.getGlobalBounds().getSize().x / 2, BACKGROUND_HEIGHT / 2.0);
+
 			while (window.isOpen()) {
+				draw_world(&window, &background_sprite, &world);
+
+				sf::RectangleShape mask(sf::Vector2f(BACKGROUND_WIDTH, BACKGROUND_HEIGHT));
+				mask.setFillColor(sf::Color(255, 255, 255, 100));
+				window.draw(mask);
+
+				score_text.setPosition(score_text.getPosition().x, score_text.getPosition().y + sinf(score_float_angle) / 2);
+				score_float_angle += 0.05;
+
+				window.draw(score_text);
+				window.display();
+
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 					window.close();
 			}
