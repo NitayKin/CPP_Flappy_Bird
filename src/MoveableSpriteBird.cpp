@@ -10,7 +10,7 @@ MoveableSpriteBird::MoveableSpriteBird(sf::Texture& Texture, float mass) :
 
 void MoveableSpriteBird::tick_update()
 {
-	sf::Vector2f current_acceleration = {0,9.81f * this->mass};
+	sf::Vector2f current_acceleration = {0,GRAV_CONST * this->mass};
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		velocity = sf::Vector2f(0,-150.0f*this->mass);
 	velocity+=current_acceleration;

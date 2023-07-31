@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Globals.hpp"
 #include "MoveableSprite.hpp"
 
 class MoveableSpriteBird : public MoveableSprite

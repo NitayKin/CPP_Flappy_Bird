@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <random>
+
 
 #include "Globals.hpp"
 #include "MoveableSprite.hpp"
