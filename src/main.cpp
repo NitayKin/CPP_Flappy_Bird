@@ -59,12 +59,12 @@ int main() {
 
 		if(world.check_lose()){
 			float score_float_angle = 0.0;
-			sf::Vector2f score_text_center = score_text.getGlobalBounds().getSize() / 2.0f;
-			sf::Vector2f score_text_local_bounds = score_text_center + score_text.getLocalBounds().getPosition();
+			sf::Vector2f score_text_center = sf::Vector2f(score_text.getGlobalBounds().width/ 2.0f,score_text.getGlobalBounds().height/ 2.0f);
+			sf::Vector2f score_text_local_bounds = score_text_center + sf::Vector2f(score_text.getLocalBounds().left,score_text.getLocalBounds().top);
 
 		    score_text.setCharacterSize(100);
 			score_text.setOrigin(score_text_local_bounds);
-			score_text.setPosition(BACKGROUND_WIDTH / 2.0 - score_text.getGlobalBounds().getSize().x / 2, BACKGROUND_HEIGHT / 2.0);
+			score_text.setPosition(BACKGROUND_WIDTH / 2.0 - score_text.getGlobalBounds().top/ 2, BACKGROUND_HEIGHT / 2.0);
 
 			while (window.isOpen()) {
 				draw_world(&window, &background_sprite, &world);
