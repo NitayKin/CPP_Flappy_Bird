@@ -11,6 +11,10 @@
 #define BAR_HEIGHT 165.0f
 #define BAR_WIDTH 53.0f
 
+#define BARS_FIT_BACKGROUND (BACKGROUND_HEIGHT/BAR_HEIGHT)
+
+#define GAP_BETWEEN_BARS ((BAR_HEIGHT*1.5f)/BAR_HEIGHT)
+
 extern uint64_t score;
 
 

@@ -37,25 +37,28 @@ void World::tick_update()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> distribution(1.f, 1.7f);
-    float scale;
+    std::uniform_real_distribution<float> distribution_bar_height(0.4f, 2.f);
+    float scale_top_bar= distribution_bar_height(gen);
+    std::uniform_real_distribution<float> distribution_gap_height(0.75f, 1.f);
+    float scale_gap_height = distribution_gap_height(gen);
+    float scale_bottom_bar= BARS_FIT_BACKGROUND - (scale_top_bar + GAP_BETWEEN_BARS*scale_gap_height);
 	for(auto sprite : objects)
 		sprite->tick_update();
 	for( auto obj = objects.begin() + 1; obj!=objects.end();++obj){
+		sf::FloatRect obj_bounds = (*obj)->getGlobalBounds();
 		sf::FloatRect window_bounds(0.f, 0.f, BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
 		sf::FloatRect intersec_bar_bounds(-BAR_WIDTH, 0.f, BAR_WIDTH,BAR_HEIGHT);
-		if (!window_bounds.intersects((*obj)->getGlobalBounds())){
-			score++;
-		    scale = distribution(gen);
-			if(intersec_bar_bounds.intersects((*obj)->getGlobalBounds())){
+		if (!window_bounds.intersects(obj_bounds)){
+			if(intersec_bar_bounds.intersects(obj_bounds)){
+				score++;
 				(*obj)->setPosition(sf::Vector2f(BACKGROUND_WIDTH-BAR_WIDTH,0.0f));
 				(*obj)->setScale(1, 1); //return to base
-				(*obj)->scale(sf::Vector2f(scale,scale));
+				(*obj)->scale(sf::Vector2f(1,scale_top_bar));
 			}
 			else{
-				(*obj)->setPosition(sf::Vector2f(BACKGROUND_WIDTH,BACKGROUND_HEIGHT-BAR_HEIGHT*scale));
+				(*obj)->setPosition(sf::Vector2f(BACKGROUND_WIDTH-BAR_WIDTH,BACKGROUND_HEIGHT-BAR_HEIGHT*scale_bottom_bar));
 				(*obj)->setScale(1, 1); //return to base
-				(*obj)->scale(sf::Vector2f(scale,scale));
+				(*obj)->scale(sf::Vector2f(1,scale_bottom_bar));
 			}
 		}
 	}
