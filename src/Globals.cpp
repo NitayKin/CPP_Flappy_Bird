@@ -1,6 +1,7 @@
 #include "Globals.hpp"
 
-uint64_t score = 0;
+uint64_t g_score = 0;
+uint8_t g_command_from_python = 0;
 
 bool check_collision(const sf::Sprite* object1,const sf::Sprite* object2)
 {

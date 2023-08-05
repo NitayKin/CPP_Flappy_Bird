@@ -50,7 +50,7 @@ void World::tick_update()
 		sf::FloatRect intersec_bar_bounds(-BAR_WIDTH, 0.f, BAR_WIDTH,BAR_HEIGHT);
 		if (!window_bounds.intersects(obj_bounds)){
 			if(intersec_bar_bounds.intersects(obj_bounds)){
-				score++;
+				g_score++;
 				(*obj)->setPosition(sf::Vector2f(BACKGROUND_WIDTH-BAR_WIDTH,0.0f));
 				(*obj)->setScale(1, 1); //return to base
 				(*obj)->scale(sf::Vector2f(1,scale_top_bar));

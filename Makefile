@@ -14,7 +14,11 @@ LIBS := -lsfml-graphics -lsfml-window -lsfml-system
 EXECUTABLE := Game # $@
 
 all:
-	$(CC) -I$(INCDIR) $(CFLAGS) -o $(EXECUTABLE) $(SRCS) $(LIBS) 
+	$(CC) -I$(INCDIR) $(CFLAGS) -o $(EXECUTABLE) $(SRCS) $(LIBS)
+	-rm ../Flappy_Bird_AI/Game
+	-rm -r ../Flappy_Bird_AI/assets
+	cp Game ../Flappy_Bird_AI
+	cp -r assets ../Flappy_Bird_AI
 
 clean:
 	rm -f $(EXECUTABLE)

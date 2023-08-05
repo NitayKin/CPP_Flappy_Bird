@@ -8,11 +8,10 @@
 
 class MoveableSpriteBar : public MoveableSprite
 {
-private:
+public:
 	sf::Vector2f velocity;
 	float mass;
 
-public:
 	MoveableSpriteBar(sf::Texture&,float);
 	virtual void tick_update();
 	~MoveableSpriteBar();
