@@ -16,7 +16,7 @@
 #define GAP_BETWEEN_BARS ((BAR_HEIGHT*1.5f)/BAR_HEIGHT)
 
 extern uint64_t g_score;
-extern uint8_t g_command_from_python;
+extern int g_command_from_python;
 
 
 bool check_collision(const sf::Sprite*,const sf::Sprite*);

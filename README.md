@@ -1,8 +1,6 @@
-# Flappy Bird in Cpp
+# Flappy Bird in Cpp + reinforcment learning
 
-The good old game back in cpp.
-Coming back with some amazing gameplay that will keep you hooked
-and wanting to get that high score.
+compile as usual, then run the reinforcment learning project.
 
 Compilation:
 *Make sure to have smfl installed*

@@ -23,7 +23,7 @@ void draw_world(sf::RenderWindow *window, sf::Sprite *background_sprite, World& 
 }
 
 
-void prepare_information(float values[],bool is_done, World& world)
+void prepare_information(float values[],float is_done, World& world)
 {
 	std::vector<MoveableSprite*> objects = world.get_objects();
 	sf::FloatRect obj_bird_bounds = objects[0]->getGlobalBounds();
@@ -41,7 +41,6 @@ void prepare_information(float values[],bool is_done, World& world)
 
 
 int main() {
-	printf("started from the game!");
 	float values[4];
 
     int client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -95,14 +94,11 @@ int main() {
 			}
 		}
 
-		printf("awaiting command!");
 	    if (recv(client_socket, &g_command_from_python, sizeof(g_command_from_python), MSG_WAITALL) != sizeof(g_command_from_python)) {
 	        std::cerr << "Error receiving data from server\n";
 	        close(client_socket);
 	        return 1;
 	    }
-
-		printf("got command!");
 
 		world.tick_update();
 
@@ -112,16 +108,17 @@ int main() {
 		window.display();
 
 		if(world.check_lose()){
-			prepare_information(values,true,world);
+			prepare_information(values,1.f,world);
 		    if (write(client_socket, values, sizeof(values)) != sizeof(values)) {
 		        std::cerr << "Error sending data to server\n";
 		        close(client_socket);
 		        return 1;
 		    }
 			window.close();
+			return 0;
 		}
 
-		prepare_information(values,false,world);
+		prepare_information(values,0.f,world);
 	    if (write(client_socket, values, sizeof(values)) != sizeof(values)) {
 	        std::cerr << "Error sending data to server\n";
 	        close(client_socket);
