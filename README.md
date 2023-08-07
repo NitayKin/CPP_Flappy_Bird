@@ -1,14 +1,12 @@
 # Flappy Bird in Cpp + reinforcment learning
 
-compile as usual, then run the reinforcment learning project.
+put this project in the same folder as "Flappy_Bird_AI" project, compile and run the other project.
 
 Compilation:
 *Make sure to have smfl installed*
 
 ```bash
 $ make
-$ ./Game
-# or
-$ make run
+$ make gui
 ```
 

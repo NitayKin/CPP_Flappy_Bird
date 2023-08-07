@@ -32,19 +32,19 @@ void prepare_information(float values[],float is_done, World& world)
 	sf::Vector2f bird_mass_center = sf::Vector2f(obj_bird_bounds.left+obj_bird_bounds.width/2,obj_bird_bounds.top+obj_bird_bounds.height/2);
 	sf::Vector2f up_bar_center_rim = sf::Vector2f(obj_up_bar_bounds.left+obj_up_bar_bounds.width/2,obj_up_bar_bounds.height);
 	sf::Vector2f down_bar_center_rim = sf::Vector2f(obj_down_bar_bounds.left+obj_down_bar_bounds.width/2,obj_down_bar_bounds.top);
-	values[0] = ((MoveableSpriteBar*)objects[1])->velocity.x; //speed
-	values[1] = std::sqrt(std::pow(bird_mass_center.x - up_bar_center_rim.x, 2) + std::pow(bird_mass_center.y - up_bar_center_rim.y, 2)); //distance between bird and upper bar
-	values[2] = std::sqrt(std::pow(bird_mass_center.x - down_bar_center_rim.x, 2) + std::pow(bird_mass_center.y - down_bar_center_rim.y, 2)); //distance between bird and down bar
-	values[3] = bird_mass_center.y;
-	values[4] = abs(bird_mass_center.y-BACKGROUND_HEIGHT);
 
-	values[5] = is_done;
+	values[0] = ((MoveableSpriteBar*)objects[1])->velocity.x * -1.f; //speed
+	values[1] = bird_mass_center.y; //Y coordinate of the bird middle
+	values[2] = obj_down_bar_bounds.top - ((BACKGROUND_HEIGHT-obj_up_bar_bounds.height-obj_down_bar_bounds.height)/2); //Y coordinate of the middle point between the bars
+	values[3] = (float)g_score;
+
+	values[4] = is_done;
 }
 
 
 
 int main() {
-	float values[6];
+	float values[5];
 
     int client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
     if (client_socket == -1) {
@@ -61,9 +61,10 @@ int main() {
         close(client_socket);
         return 1;
     }
-
-//	sf::RenderWindow window(sf::VideoMode(BACKGROUND_WIDTH, BACKGROUND_HEIGHT), "SFML Demo", sf::Style::Titlebar | sf::Style::Close);
-//	window.setFramerateLimit(40);
+#ifdef ENABLE_FEATURE_GUI
+	sf::RenderWindow window(sf::VideoMode(BACKGROUND_WIDTH, BACKGROUND_HEIGHT), "SFML Demo", sf::Style::Titlebar | sf::Style::Close);
+	window.setFramerateLimit(40);
+#endif
 
     sf::Font font;
     if (!font.loadFromFile("assets/arial.ttf")) {
@@ -88,14 +89,15 @@ int main() {
 	World world;
 
 	while (true) {
-//		score_text.setString(std::to_string(g_score));
-//
-//		sf::Event event;
-//		while (window.pollEvent(event)) {
-//			if (event.type == sf::Event::Closed) {
-//				window.close();
-//			}
-//		}
+		score_text.setString(std::to_string(g_score));
+#ifdef ENABLE_FEATURE_GUI
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+		}
+#endif
 
 	    if (recv(client_socket, &g_command_from_python, sizeof(g_command_from_python), MSG_WAITALL) != sizeof(g_command_from_python)) {
 	        std::cerr << "Error receiving data from server\n";
@@ -104,12 +106,12 @@ int main() {
 	    }
 
 		world.tick_update();
+#ifdef ENABLE_FEATURE_GUI
+		draw_world(&window, &background_sprite, world);
 
-//		draw_world(&window, &background_sprite, world);
-
-//		window.draw(score_text);
-//		window.display();
-
+		window.draw(score_text);
+		window.display();
+#endif
 		if(world.check_lose()){
 			prepare_information(values,1.f,world);
 		    if (write(client_socket, values, sizeof(values)) != sizeof(values)) {
@@ -117,7 +119,9 @@ int main() {
 		        close(client_socket);
 		        return 1;
 		    }
-//			window.close();
+#ifdef ENABLE_FEATURE_GUI
+			window.close();
+#endif
 			return 0;
 		}
 

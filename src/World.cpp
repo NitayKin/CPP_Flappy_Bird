@@ -18,6 +18,8 @@ World::World()
 
 	MoveableSpriteBird* birdy_sprite = new MoveableSpriteBird(birdy_texture,0.1f);
 	birdy_sprite->scale(sf::Vector2f(0.1,0.1));
+	birdy_sprite->setPosition(sf::Vector2f(0,BACKGROUND_HEIGHT/2));
+
 	MoveableSpriteBar* upper_bar_sprite = new MoveableSpriteBar(upper_bar_texture,1.0f);
 	MoveableSpriteBar* bottom_bar_sprite = new MoveableSpriteBar(bottom_bar_texture,1.0f);
 
