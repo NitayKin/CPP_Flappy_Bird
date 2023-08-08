@@ -36,15 +36,18 @@ void prepare_information(float values[],float is_done, World& world)
 	values[0] = ((MoveableSpriteBar*)objects[1])->velocity.x * -1.f; //speed
 	values[1] = bird_mass_center.y; //Y coordinate of the bird middle
 	values[2] = obj_down_bar_bounds.top - ((BACKGROUND_HEIGHT-obj_up_bar_bounds.height-obj_down_bar_bounds.height)/2); //Y coordinate of the middle point between the bars
-	values[3] = (float)g_score;
+	values[3] = up_bar_center_rim.x; //X coordinate of the middle point between the bars
 
-	values[4] = is_done;
+	values[4] = (float)g_score;
+	values[5] = down_bar_center_rim.y - up_bar_center_rim.y; //gap length
+
+	values[6] = is_done;
 }
 
 
 
 int main() {
-	float values[5];
+	float values[7];
 
     int client_socket = socket(AF_UNIX, SOCK_STREAM, 0);
     if (client_socket == -1) {
